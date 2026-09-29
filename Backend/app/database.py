@@ -11,23 +11,36 @@ Base = declarative_base()
 
 def init_db():
     """Initializes the MySQL database and tables if they do not exist."""
-    # 1. Connect to MySQL server to create the database if not present
+    # 1. Check/verify connection via pymysql
     try:
         connection = pymysql.connect(
             host=settings.DB_HOST,
             user=settings.DB_USER,
             password=settings.DB_PASSWORD,
             port=settings.DB_PORT,
+            database=settings.DB_NAME,
             charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor
         )
-        with connection.cursor() as cursor:
-            cursor.execute(f"CREATE DATABASE IF NOT EXISTS `{settings.DB_NAME}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;")
-        connection.commit()
         connection.close()
-        print(f"[DB] Verified/Created database `{settings.DB_NAME}`.")
-    except Exception as e:
-        print(f"[DB Warning] Could not verify/create database via pymysql: {e}")
+        print(f"[DB] Verified connection to database `{settings.DB_NAME}`.")
+    except Exception:
+        try:
+            connection = pymysql.connect(
+                host=settings.DB_HOST,
+                user=settings.DB_USER,
+                password=settings.DB_PASSWORD,
+                port=settings.DB_PORT,
+                charset='utf8mb4',
+                cursorclass=pymysql.cursors.DictCursor
+            )
+            with connection.cursor() as cursor:
+                cursor.execute(f"CREATE DATABASE IF NOT EXISTS `{settings.DB_NAME}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;")
+            connection.commit()
+            connection.close()
+            print(f"[DB] Verified/Created database `{settings.DB_NAME}`.")
+        except Exception as e:
+            print(f"[DB Notice] Database check via pymysql: {e}")
 
     # 2. Create tables using SQLAlchemy
     engine = create_engine(
