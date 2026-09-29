@@ -23,29 +23,25 @@ class Settings(BaseSettings):
     @property
     def database_url(self) -> str:
         # Standard PyMySQL URL with URL-encoded credentials
-        return str(
-            URL.create(
-                drivername="mysql+pymysql",
-                username=self.DB_USER,
-                password=self.DB_PASSWORD,
-                host=self.DB_HOST,
-                port=self.DB_PORT,
-                database=self.DB_NAME,
-            )
-        )
+        return URL.create(
+            drivername="mysql+pymysql",
+            username=self.DB_USER,
+            password=self.DB_PASSWORD,
+            host=self.DB_HOST,
+            port=self.DB_PORT,
+            database=self.DB_NAME,
+        ).render_as_string(hide_password=False)
 
     @property
     def server_connection_url(self) -> str:
         # URL without database name
-        return str(
-            URL.create(
-                drivername="mysql+pymysql",
-                username=self.DB_USER,
-                password=self.DB_PASSWORD,
-                host=self.DB_HOST,
-                port=self.DB_PORT,
-            )
-        )
+        return URL.create(
+            drivername="mysql+pymysql",
+            username=self.DB_USER,
+            password=self.DB_PASSWORD,
+            host=self.DB_HOST,
+            port=self.DB_PORT,
+        ).render_as_string(hide_password=False)
 
     @property
     def cors_origins(self) -> List[str]:
