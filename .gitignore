@@ -44,3 +44,9 @@ htmlcov/
 *.swo
 .DS_Store
 Thumbs.db
+
+# Documentation & Specifications
+Design_Doc.md
+PRD.md
+Technical_Architecture_and_Logic_Guide.md
+
