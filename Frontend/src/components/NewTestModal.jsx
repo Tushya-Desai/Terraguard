@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { X, Upload, MapPin, Sparkles, AlertCircle, Camera, FlaskConical } from 'lucide-react';
+import { X, AlertCircle, Camera } from 'lucide-react';
 import RiskBadge from './RiskBadge';
 import LocationPicker from './LocationPicker';
-import { generateRandomDemoData } from '../utils/demoAutofill';
 import api from '../api/client';
 
 const NewTestModal = ({ isOpen, onClose, onTestCreated }) => {
@@ -34,18 +33,6 @@ const NewTestModal = ({ isOpen, onClose, onTestCreated }) => {
       setPhotoFile(file);
       setPhotoPreview(URL.createObjectURL(file));
     }
-  };
-
-  const handleAutofill = () => {
-    const demo = generateRandomDemoData(latitude, longitude);
-    setPlotLabel(demo.plotLabel);
-    setLeadConcentration(demo.leadConcentration);
-    setLatitude(demo.latitude);
-    setLongitude(demo.longitude);
-    setRemediationActive(demo.remediationActive);
-    setPhotoFile(demo.photoFile);
-    setPhotoPreview(demo.photoPreview);
-    setError('');
   };
 
   const handleLocationChange = (lat, lng) => {
@@ -118,34 +105,6 @@ const NewTestModal = ({ isOpen, onClose, onTestCreated }) => {
 
         {/* Scrollable Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto">
-          {/* Quick Demo Autofill Shortcut */}
-          <div className="flex items-center justify-between p-3 rounded-xl bg-brand-gold/10 border border-brand-gold/25 text-xs">
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-brand-gold/20 text-brand-gold flex items-center justify-center shrink-0">
-                <FlaskConical className="w-4 h-4" />
-              </div>
-              <div>
-                <div className="flex items-center gap-1.5">
-                  <span className="font-bold text-tg-text dark:text-tg-text-dark">Demo Shortcut</span>
-                  <span className="px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase bg-brand-gold/20 text-brand-gold">
-                    DEMO
-                  </span>
-                </div>
-                <span className="text-[11px] text-tg-muted dark:text-tg-muted-dark block">
-                  Autofill realistic plot data, reaction image &amp; GPS
-                </span>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={handleAutofill}
-              className="px-3 py-1.5 rounded-xl bg-brand-gold hover:bg-amber-600 text-white font-semibold text-xs shadow-sm flex items-center gap-1.5 transition-all cursor-pointer shrink-0 ml-2"
-              title="Populate all fields with realistic random sample values"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Autofill Demo Data</span>
-            </button>
-          </div>
 
           {error && (
             <div className="p-3 rounded-xl bg-risk-high/10 border border-risk-high/30 text-risk-high text-xs flex items-center gap-2">

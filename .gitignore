@@ -50,3 +50,9 @@ Design_Doc.md
 PRD.md
 Technical_Architecture_and_Logic_Guide.md
 
+# Local test & demo scripts
+test_*.py
+Backend/test_*.py
+demo_*.py
+
+
