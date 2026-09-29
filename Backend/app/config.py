@@ -16,7 +16,7 @@ class Settings(BaseSettings):
 
     BACKEND_HOST: str = "127.0.0.1"
     BACKEND_PORT: int = 8000
-    ALLOWED_ORIGINS: str = "http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000"
+    ALLOWED_ORIGINS: str = "https://terraguard-eosin.vercel.app,http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000"
 
     UPLOAD_DIR: str = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "uploads")
 
@@ -49,7 +49,20 @@ class Settings(BaseSettings):
 
     @property
     def cors_origins(self) -> List[str]:
-        return [origin.strip() for origin in self.ALLOWED_ORIGINS.split(",") if origin.strip()]
+        raw = self.ALLOWED_ORIGINS.strip()
+        if raw.startswith("[") and raw.endswith("]"):
+            import json
+            try:
+                parsed = json.loads(raw)
+                if isinstance(parsed, list):
+                    return [str(o).strip().strip("'\"").rstrip("/") for o in parsed if o]
+            except Exception:
+                pass
+        return [
+            origin.strip().strip("'\"").rstrip("/")
+            for origin in raw.split(",")
+            if origin.strip().strip("'\"").rstrip("/")
+        ]
 
     model_config = SettingsConfigDict(
         env_file=(
